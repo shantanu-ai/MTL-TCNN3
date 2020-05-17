@@ -7,6 +7,7 @@ import torch.optim as optim
 import torch.utils.data
 from torchvision.utils import save_image
 
+
 # ------Model Start------------#
 class Autoencoder(nn.Module):
     def __init__(self):
@@ -224,7 +225,7 @@ def final_test_train(train_set, test_set,
                      epochs,
                      test_set_size, classes):
     model_bn = train_model(train_set, epochs, show_plot=True)
-    print("Done")
+    print("Training completed")
 
 
 # ---------------BL End ------------- #
@@ -244,7 +245,7 @@ def test(test_data_set):
     idx = 1
     for batch in data_loader:
         img, _ = batch
-        img_noisy = img + noise_factor* torch.randn(img.shape)
+        img_noisy = img + noise_factor * torch.randn(img.shape)
         img_noisy = np.clip(img_noisy, 0., 1.)
 
         img = img.to(device)
