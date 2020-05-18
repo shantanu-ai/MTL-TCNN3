@@ -16,7 +16,7 @@ def test_auto_encoder():
     dL = DataLoader()
     test_data_set = dL.pre_process_test(texture_data_set_path_test)
 
-    task = "---validating "
+    task = "---testing"
     test = validate_Auto_encoder()
     test.validate_auto_encoder(test_data_set, model, task)
 

@@ -1,0 +1,1 @@
+<built-in method numpy of Tensor object at 0x113e96d20>

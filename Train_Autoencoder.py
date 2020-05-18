@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
+import copy
 
 from autoEncoder import Autoencoder
 
@@ -19,10 +20,10 @@ class Train_Auto_encoder:
         print('Saved model parameters to disk.')
         return model
 
-    @staticmethod
-    def __train(train_set, train_parameters, device):
+    def __train(self, train_set, train_parameters, device):
         print("..Training started..")
         network = Autoencoder().to(device)
+        self.__save_init_weights(network)
         epochs = train_parameters["epochs"]
         batch_size = train_parameters["batch_size"]
         lr = train_parameters["learning_rate"]
@@ -71,3 +72,11 @@ class Train_Auto_encoder:
                 total_loss += loss.item()
             print("epoch: {0}, loss: {1}".format(epoch, total_loss))
         return network
+
+    def __save_init_weights(self, network):
+        np.save("./init_weights/enc1_weight.npy", network.enc1.weight.cpu().data.numpy())
+        np.save("./init_weights/enc1_bias.npy", network.enc1.bias.cpu().data.numpy())
+        np.save("./init_weights/enc2_weight.npy", network.enc2.weight.cpu().data.numpy())
+        np.save("./init_weights/enc2_bias.npy", network.enc2.bias.cpu().data.numpy())
+        np.save("./init_weights/enc3_weight.npy", network.enc3.weight.cpu().data.numpy())
+        np.save("./init_weights/enc3_bias.npy", network.enc3.bias.cpu().data.numpy())

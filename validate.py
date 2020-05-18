@@ -7,7 +7,7 @@ from torchvision.utils import save_image
 class validate_Auto_encoder:
     @staticmethod
     def validate_auto_encoder(test_data_set, model, task):
-        print(task + "started -----------")
+        print(task + "----- started -----------")
         data_loader = torch.utils.data.DataLoader(
             test_data_set, num_workers=1, shuffle=False, pin_memory=True)
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -29,4 +29,4 @@ class validate_Auto_encoder:
             save_image(outputs, './Saved_Images/' + str(idx) + '_denoised_test_reconstruction.png')
             idx += 1
 
-        print(task + "completed -----------")
+        print(task + "----- completed -----------")

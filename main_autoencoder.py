@@ -12,7 +12,7 @@ def auto_encoder_BL():
 
     split_size = 0.05
     train_parameters = {
-        "epochs": 1,
+        "epochs": 300,
         "learning_rate": 0.001,
         "noise_factor": 0.5,
         "batch_size": 32
@@ -30,7 +30,7 @@ def auto_encoder_BL():
     train = Train_Auto_encoder()
     model = train.train_auto_encoder(train_set, train_parameters, saved_model_name, device)
 
-    task = "---validating "
+    task = "---validating"
     test = validate_Auto_encoder()
     test.validate_auto_encoder(val_set, model, task)
 
