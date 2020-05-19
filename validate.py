@@ -25,8 +25,9 @@ class validate_Auto_encoder:
             img_noisy = img_noisy.to(device)
 
             outputs = model(img_noisy)
-            save_image(img_noisy, './Saved_Images/' + str(idx) + '_noisy_test_input.png')
-            save_image(outputs, './Saved_Images/' + str(idx) + '_denoised_test_reconstruction.png')
+            save_image(img, './Saved_Images/' + str(idx) + '_original_test_input.jpg')
+            save_image(img_noisy, './Saved_Images/' + str(idx) + '_noisy_test_input.jpg')
+            save_image(outputs, './Saved_Images/' + str(idx) + '_denoised_test_reconstruction.jpg')
             idx += 1
 
         print(task + "----- completed -----------")

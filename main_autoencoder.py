@@ -3,6 +3,7 @@ from Util import Util
 from dataLoader import DataLoader
 from validate import validate_Auto_encoder
 
+
 def auto_encoder_BL():
     device = Util.get_device()
     image_net_data_set_path = "./Dataset/ImageNet/ImageNet_X.pickle"
