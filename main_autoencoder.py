@@ -15,7 +15,7 @@ def auto_encoder_BL():
     train_parameters = {
         "epochs": 300,
         "learning_rate": 0.001,
-        "noise_factor": 0.5,
+        "noise_factor": 0.3,
         "batch_size": 32
     }
 

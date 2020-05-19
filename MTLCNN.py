@@ -74,6 +74,6 @@ class MTLCNN(nn.Module):
         texture_head = F.relu(self.fc_texture_2(texture_head))
         texture_head = self.texture_out(texture_head)
 
-        return object_head
+        return object_head, texture_head
 
         # return texture_head
