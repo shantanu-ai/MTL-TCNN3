@@ -121,7 +121,7 @@ def train(network, texture_train_set, image_net_train_set, train_parameters, ima
         object_corrects = 0
         texture_corrects = 0
 
-        # shuffle the batches
+        # shuffle all the mini batches
         random.shuffle(batch_set)
 
         for batch in batch_set:
