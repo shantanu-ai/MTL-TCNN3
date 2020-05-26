@@ -25,10 +25,12 @@ parser.add_argument('-multiprocessing_workers', default = 8, type=int)
 
 args, args_other = parser.parse_known_args()
 
-args.data_root = "./data_root_folder/imagenet"
+args.data_root = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Git_Hub/Texture_Classification/ImageNet-Datasets-Downloader/temp"
 args.use_class_list = True
-args.class_list = ["n02871525",  "n02927161", "n02999410", "n03000134", "n03042490",
-"n03089624", "n03207743", "n03216828", "n03461385"]
+args.class_list = ["n01677366", "n01807496", "n02099267", "n02108422", "n02113712", "n02130308", "n02319095", "n02480495",
+                   "n02483362", "n02786058", "n02807133", "n03000684", "n03095699", "n03532672", "n03544143", "n03599486",
+                   "n03649909", "n03710637", "n03761084", "n03803284", "n03832673", "n03840681", "n03854065", "n03887697",
+                   "n04136333", "n04501370", "n06785654", "n12057211"]
 args.images_per_class = 700
 args.multiprocessing_workers = 24
 
