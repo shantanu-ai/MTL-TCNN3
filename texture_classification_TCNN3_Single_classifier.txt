@@ -1,0 +1,43 @@
+### No autoencoder init
+..Testing started..
+--------------------------------------------------
+Split: 1 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split1.pth
+total:515 texture accuracy: 0.27393617021276595
+--------------------------------------------------
+Split: 2 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split2.pth
+total:533 texture accuracy: 0.2835106382978723
+--------------------------------------------------
+Split: 3 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split3.pth
+total:503 texture accuracy: 0.2675531914893617
+--------------------------------------------------
+Split: 4 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split4.pth
+total:567 texture accuracy: 0.30159574468085104
+--------------------------------------------------
+Split: 5 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split5.pth
+total:502 texture accuracy: 0.2670212765957447
+--------------------------------------------------
+Split: 6 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split6.pth
+total:527 texture accuracy: 0.2803191489361702
+--------------------------------------------------
+Split: 7 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split7.pth
+total:522 texture accuracy: 0.2776595744680851
+--------------------------------------------------
+Split: 8 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split8.pth
+total:549 texture accuracy: 0.29202127659574467
+--------------------------------------------------
+Split: 9 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split9.pth
+total:490 texture accuracy: 0.26063829787234044
+--------------------------------------------------
+Split: 10 =======>
+Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split10.pth
+total:541 texture accuracy: 0.2877659574468085
+Mean accuracy: 0.2792021276595745

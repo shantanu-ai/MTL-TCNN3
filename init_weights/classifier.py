@@ -3,7 +3,7 @@ import random
 import torch.utils.data
 from torch import nn, optim
 
-from MTLCNN import MTLCNN
+from MultitaskClassifier import MTLCNN
 from Util import Util
 from autoEncoder import Autoencoder
 from dataLoader import DataLoader

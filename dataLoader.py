@@ -2,39 +2,61 @@ import os
 
 import numpy as np
 import sklearn.model_selection as sklearn
-from torch.utils.data import ConcatDataset
-
 from Util import Util
+from torch.utils.data import ConcatDataset
 
 
 class DataLoader:
     def __init__(self):
         self.texture_set_size = 0
         self.image_net_set_size = 0
+        self.image_net_set_train_size = 0
+        self.image_net_set_test_size = 0
+
+    def get_image_net_train_size(self):
+        return self.image_net_set_train_size
+
+    def get_image_net_test_size(self):
+        return self.image_net_set_test_size
 
     def pre_process_test(self, data_set_path):
         test_data = self.__read_dataset_test(data_set_path)
         processed_dataset = Util.convert_to_tensor_test(test_data)
         return processed_dataset
 
-    def get_texture_train_set(self, texture_data_set_path, texture_label_set_path,
-                              split_size, device):
-        return self.__split_train_test_validation_set_texture(texture_data_set_path,
-                                                              texture_label_set_path,
-                                                              split_size, device)
+    def pre_process_test_texture(self, data_set_path, label_set_path, device):
+        test_data, labels_set = self.__read_dataset(data_set_path, label_set_path)
+        processed_dataset = Util.convert_to_tensor(test_data, labels_set, device)
+        self.texture_set_size = labels_set.shape[0]
+        return processed_dataset
+
+    def get_tensor_set(self, dataset_path, label_set_path,
+                       device):
+        train_data_set, labels_set = self.__read_dataset(dataset_path, label_set_path)
+        texture_data_set_size = labels_set.shape[0]
+        train_set = Util.convert_to_tensor(train_data_set, labels_set, device)
+
+        return train_set, texture_data_set_size
 
     def get_image_net_train_set(self, image_net_data_set_path, image_net_label_set_path,
                                 split_size, device):
         print("ImageNet Dataset Size")
         train_data_set, labels_set = self.__read_dataset(image_net_data_set_path, image_net_label_set_path)
-        self.image_net_set_size = labels_set.shape[0]
         X_train, X_val, Y_train, Y_val = self.__spilt_data_set(train_data_set,
                                                                labels_set,
                                                                split_size=split_size)
-        train_set = Util.convert_to_tensor(train_data_set, labels_set, device)
+
+        self.image_net_set_train_size = Y_train.shape[0]
+        self.image_net_set_test_size = Y_val.shape[0]
+        print("Train set")
+        print(self.image_net_set_train_size)
+        print("Val set")
+        print(self.image_net_set_test_size)
+
+        train_set = Util.convert_to_tensor(X_train, Y_train, device)
         val_set = Util.convert_to_tensor(X_val, Y_val, device)
 
-        return train_set, val_set
+        return train_set, Y_train.shape[0], val_set, Y_val.shape[0]
 
     def get_texture_set_size(self):
         return self.texture_set_size
@@ -46,13 +68,14 @@ class DataLoader:
                                     texture_data_set_path, texture_label_set_path,
                                     split_size, device):
         print("----Size of data-sets from pickle file----")
-        image_net_train_set = self.__split_train_test_validation_set_image_net(image_net_data_set_path,
-                                                                               image_net_label_set_path,
-                                                                               split_size, device)
+        image_net_train_set = self.split_train_test_validation_set_image_net(image_net_data_set_path,
+                                                                             image_net_label_set_path,
+                                                                             device)
 
-        texture_train_set, texture_val_set = self.__split_train_test_validation_set_texture(texture_data_set_path,
-                                                                                            texture_label_set_path,
-                                                                                            split_size, device)
+        texture_train_set, texture_val_set, train_data_set, labels_set = self.__split_train_test_validation_set_texture(
+            texture_data_set_path,
+            texture_label_set_path,
+            split_size, device)
 
         train_set = ConcatDataset([image_net_train_set, texture_train_set])
 
@@ -76,9 +99,9 @@ class DataLoader:
                                                                split_size=split_size)
         train_set = Util.convert_to_tensor(X_train, Y_train, device)
         val_set = Util.convert_to_tensor(X_val, Y_val, device)
-        return train_set, val_set
+        return train_set, val_set, train_data_set, labels_set
 
-    def __split_train_test_validation_set_image_net(self, data_set_path, label_set_path, split_size, device):
+    def split_train_test_validation_set_image_net(self, data_set_path, label_set_path, device):
         """
         This method splits the data set into train, test and validation set. Also this method resize the images
         based on image dimensions specified by image_dims parameter.
@@ -93,14 +116,14 @@ class DataLoader:
         """
         print("ImageNet Dataset Size")
         train_data_set, labels_set = self.__read_dataset(data_set_path, label_set_path)
-        self.image_net_set_size = labels_set.shape[0]
+        train_set_size = labels_set.shape[0]
         # X_train, X_val, Y_train, Y_val = self.__spilt_data_set(train_data_set,
         #                                                        labels_set,
         #                                                        split_size=split_size)
         train_set = Util.convert_to_tensor(train_data_set, labels_set, device)
         # val_set = Util.convert_to_tensor(X_val, Y_val, device)
 
-        return train_set
+        return train_set, train_set_size
 
     def __read_dataset_test(self, data_set_path):
         """

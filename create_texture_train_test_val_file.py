@@ -3,9 +3,8 @@ import shutil
 
 
 def do_create_files(root_path, dst_dir_root, label_dir):
-    # get the file names from source test folder
-    contents = ""
     for i in range(10):
+        # get the file names from labels folder
         file_name = root_path + label_dir + str(i + 1) + ".txt"
         with open(file_name) as f:
             for source_file in f.readlines():

@@ -3,7 +3,7 @@ import torch
 
 class Util:
     @staticmethod
-    def convert_to_tensor(X, Y, device):
+    def     convert_to_tensor(X, Y, device):
         """
         Converts the dataset to tensor.
 

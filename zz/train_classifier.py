@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
 
-from MTLCNN import MTLCNN
+from MultitaskClassifier import MTLCNN
 from MTLCNN_single import MTLCNN_single
 from autoEncoder import Autoencoder
 
