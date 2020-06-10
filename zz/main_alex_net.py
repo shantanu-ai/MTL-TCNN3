@@ -1,7 +1,7 @@
 import torch.utils.data
 from torch import nn, optim
 
-from Alexnet_single import Alex_netCNN
+from zz.Alexnet_single import Alex_netCNN
 from Util import Util
 from dataLoader import DataLoader
 

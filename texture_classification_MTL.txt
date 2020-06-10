@@ -1,0 +1,4 @@
+Split: 1 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split1.pth
+total:640 texture accuracy: 0.3404255319148936
+Mean accuracy: 0.3404255319148936
