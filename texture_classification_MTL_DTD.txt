@@ -1,0 +1,54 @@
+Split: 1 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split1.pth
+total:640 texture accuracy: 0.3404255319148936
+Mean accuracy: 0.3404255319148936
+
+Split: 2 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split2.pth
+total:673 texture accuracy: 0.3579787234042553
+Mean accuracy: 0.3579787234042553
+
+Split: 3 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split3.pth
+total:606 texture accuracy: 0.3223404255319149
+Mean accuracy: 0.3223404255319149
+Testing ended..
+
+Split: 4 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split4.pth
+total:648 texture accuracy: 0.3446808510638298
+Mean accuracy: 0.3446808510638298
+Testing ended..
+
+Split: 5 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split5.pth
+total:669 texture accuracy: 0.3558510638297872
+Mean accuracy: 0.3558510638297872
+
+Split: 6 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split6.pth
+total:651 texture accuracy: 0.34627659574468084
+Mean accuracy: 0.34627659574468084
+
+Split: 7 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split7.pth
+total:612 texture accuracy: 0.32553191489361705
+Mean accuracy: 0.32553191489361705
+Testing ended..
+Testing ended..
+
+Split: 8 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split8.pth
+total:629 texture accuracy: 0.3345744680851064
+Mean accuracy: 0.3345744680851064
+Testing ended..
+
+Split: 9 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split9.pth
+total:642 texture accuracy: 0.3414893617021277
+Mean accuracy: 0.3414893617021277
+
+Split: 10 =======>
+Model: ./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split10.pth
+total:591 texture accuracy: 0.31436170212765957
+Mean accuracy: 0.31436170212765957
