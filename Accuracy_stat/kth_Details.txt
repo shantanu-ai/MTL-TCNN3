@@ -1,0 +1,4 @@
+{'texture_batch_size': 32, 'weight_decay': 0.0005, 'epochs': 1, 'learning_rate': 0.0001, 'image_net_batch_size': 32}kth Mean accuracy: 0.53125
+{'learning_rate': 0.0001, 'epochs': 1, 'weight_decay': 0.0005, 'image_net_batch_size': 32, 'texture_batch_size': 32}kth Mean accuracy: 0.6125
+[0.6125]{'epochs': 25, 'image_net_batch_size': 32, 'texture_batch_size': 32, 'weight_decay': 0.0005, 'learning_rate': 0.0001}kth Mean accuracy: 0.8625978090766824
+[0.8857589984350548, 0.8904538341158059, 0.865414710485133, 0.8748043818466353, 0.8356807511737089, 0.8435054773082942, 0.8137715179968701, 0.8544600938967136, 0.8904538341158059, 0.8716744913928013]

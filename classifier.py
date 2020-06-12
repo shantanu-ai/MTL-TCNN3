@@ -6,6 +6,7 @@ from torch import nn, optim
 
 from MTLCNN_single import MTLCNN_single
 from MultitaskClassifier import MultitaskClassifier
+from MultitaskTClassifier import MultitaskTClassifier
 from Util import Util
 from dataLoader import DataLoader
 
@@ -30,6 +31,22 @@ def main():
          "notebook", "ocarina", "orangutan", "organ", "paper towel", "partridge", "rapeseed",
          "sandbar", "sarong", "sea urchin", "shoe shop", "shower curtain", "stone wall", "theater curtain", "tile roof",
          "turnstile", "vault", "velvet", "window screen", "wool", "yellow lady's slipper"]
+
+    IMAGE_NET_LABELS_S2 = \
+        ["common iguana", "partridge", "flat-coated retriever", "bull mastiff", "miniature poodle", "cheetah",
+         "sea urchin", "orangutan", "gibbon", "Band Aid", "bathing cap", "chain saw", "container ship", "hook",
+         "hourglass", "jinrikisha", "lawn mower", "maillot", "microwave", "muzzle", "notebook", "ocarina", "organ",
+         "paper towel", "sarong", "turnstile", "crossword puzzle", "yellow lady's slipper"
+         ]
+
+    IMAGE_NET_LABELS_T = \
+        ["alp", "artichoke", "bookshop", "butcher shop",
+         "carbonara", "chain", "chainlink fence", "cliff dwelling",
+         "confectionery", "corn", "dishrag", "dock",
+         "grocery store", "head cabbage", "honeycomb", "jigsaw puzzle",
+         "lakeside", "rapeseed",
+         "sandbar", "shoe shop", "shower curtain", "stone wall", "theater curtain", "tile roof",
+         "vault", "velvet", "window screen", "wool", ]
 
     print("Texture_label: " + str(len(TEXTURE_LABELS)))
     model_path_bn = "./Models/Auto_encoder_Model_epoch_300_lr_0.001_noise_factor_0.5.pt"
@@ -69,19 +86,19 @@ def main():
         train_parameters["learning_rate"]) + "_split{0}.pth"
 
     # training started
-    # data_loader_list = prepare_data_loader_train_10_splits(texture_train_data_set_path, texture_train_label_set_path,
-    #                                                        texture_val_data_set_path, texture_val_label_set_path,
-    #                                                        32, 0, device)
-    # train_arguments = {
-    #     "TEXTURE_LABELS": TEXTURE_LABELS,
-    #     "data_loader_list": data_loader_list,
-    #     "train_parameters": train_parameters,
-    #     "saved_model_name": saved_model_name
-    # }
-    #
-    # network = train(train_arguments, device)
-    #
-    # print('Saved model parameters to disk.')
+    data_loader_list = prepare_data_loader_train_10_splits(texture_train_data_set_path, texture_train_label_set_path,
+                                                           texture_val_data_set_path, texture_val_label_set_path,
+                                                           32, 0, device)
+    train_arguments = {
+        "TEXTURE_LABELS": TEXTURE_LABELS,
+        "data_loader_list": data_loader_list,
+        "train_parameters": train_parameters,
+        "saved_model_name": saved_model_name
+    }
+
+    network = train(train_arguments, device)
+
+    print('Saved model parameters to disk.')
     # training ended
 
     # test
@@ -92,14 +109,67 @@ def main():
                                                                device)
 
     model_path_bn = "./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split{0}.pth"
-    model_path_bn = "./Models/Multitask_Classifier_Model_epoch_400_lr_0.0001_split{0}.pth"
+    model_path_bn = "./Models/MTL/Multitask_Classifier_Model_epoch_400_lr_0.0001_split{0}.pth"
 
     test_arguments = {
         "data_loader_test_list": data_loader_test_list,
         "model_path_bn": model_path_bn,
         "TEXTURE_LABELS": TEXTURE_LABELS
     }
-    test(test_arguments, IMAGE_NET_LABELS, device)
+    # test(test_arguments, IMAGE_NET_LABELS, device)
+    testMTL(test_arguments, IMAGE_NET_LABELS_S2, IMAGE_NET_LABELS_T, device)
+
+
+def testMTL(test_parameters, IMAGE_NET_LABELS_S2, IMAGE_NET_LABELS_T, device):
+    data_loader_test_list = test_parameters["data_loader_test_list"]
+    model_path_bn = test_parameters["model_path_bn"]
+    TEXTURE_LABELS = test_parameters["TEXTURE_LABELS"]
+
+    print(model_path_bn)
+    print(device)
+    print("..Testing started..")
+
+    split_id = 0
+    accuracy_list = []
+
+    # start testing
+    for data_loader in data_loader_test_list:
+        split_id += 2
+
+        print('-' * 50)
+        print("Split: {0} =======>".format(split_id))
+        model_path = model_path_bn.format(split_id)
+        print("Model: {0}".format(model_path))
+        labels = {
+            "image_net_labels_S2": IMAGE_NET_LABELS_S2,
+            "image_net_labels_T": IMAGE_NET_LABELS_T,
+            "texture_labels": TEXTURE_LABELS
+        }
+        network_model = MultitaskTClassifier(labels).to(device)
+        # network_model = MTLCNN_single(TEXTURE_LABELS).to(device)
+        network_model.load_state_dict(torch.load(model_path, map_location=device))
+        network_model.eval()
+        total_image_per_epoch = 0
+        texture_corrects = 0
+
+        for batch in data_loader:
+            images, label = batch
+            images = images.to(device)
+            label = label.to(device)
+
+            # forward propagation
+            outputs = network_model(images)
+            total_image_per_epoch += images.size(0)
+            # texture_corrects += get_num_correct(outputs, label)
+            texture_corrects += get_num_correct(outputs[2], label)
+
+        texture_corrects_accuracy = texture_corrects / total_image_per_epoch
+        accuracy_list.append(texture_corrects_accuracy)
+        print("total:{0} texture accuracy: {1}".format(texture_corrects, texture_corrects_accuracy))
+        break
+
+    accuracy_np = np.asarray(accuracy_list)
+    print("Mean accuracy: {0}".format(np.mean(accuracy_np)))
 
 
 def test(test_parameters, IMAGE_NET_LABELS, device):
@@ -142,7 +212,7 @@ def test(test_parameters, IMAGE_NET_LABELS, device):
             outputs = network_model(images)
             total_image_per_epoch += images.size(0)
             # texture_corrects += get_num_correct(outputs, label)
-            texture_corrects += get_num_correct(outputs[1], label)
+            texture_corrects += get_num_correct(outputs[2], label)
 
         texture_corrects_accuracy = texture_corrects / total_image_per_epoch
         accuracy_list.append(texture_corrects_accuracy)

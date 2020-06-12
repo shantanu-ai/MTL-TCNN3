@@ -7,18 +7,25 @@ import torch.optim as optim
 import torch.utils.data
 
 from MultitaskClassifier import MultitaskClassifier
+from Util import Util
 from autoEncoder import Autoencoder
 
 
 class Train_Classifier:
-    def train_classifier(self, train_arguments, device):
-        return self.__train(train_arguments, device)
+    def train_classifier(self, train_arguments, device, dataset_name=""):
+        return self.__train(train_arguments, device, dataset_name=dataset_name)
 
-    def __train(self, train_arguments, device):
+    def __train(self, train_arguments, device, dataset_name=""):
+
+        # labels
         IMAGE_NET_LABELS = train_arguments["IMAGE_NET_LABELS"]
         TEXTURE_LABELS = train_arguments["TEXTURE_LABELS"]
+
+        # data loader
         image_net_data_loader_dict = train_arguments["image_net_data_loader_dict"]
+        # image_net_T_data_loader_dict = train_arguments["image_net_T_data_loader_dict"]
         texture_data_loader_list = train_arguments["texture_data_loader_list"]
+
         train_parameters = train_arguments["train_parameters"]
         saved_model_name = train_arguments["saved_model_name"]
 
@@ -26,15 +33,20 @@ class Train_Classifier:
 
         epochs = train_parameters["epochs"]
         lr = train_parameters["learning_rate"]
+        weight_decay = train_parameters["weight_decay"]
         labels = {
             "image_net_labels": IMAGE_NET_LABELS,
+            # "image_net_labels_S2": IMAGE_NET_LABELS_S2,
+            # "image_net_labels_T": IMAGE_NET_LABELS_T,
             "texture_labels": TEXTURE_LABELS
         }
         phases = ['train', 'val']
         split_id = 0
+        # task = ["Object_detection", "Texture_classification"]
         task = ["Object_detection", "Texture_classification"]
 
         for texture_data_loader_dict in texture_data_loader_list:
+            print("Dataset name: {0}".format(dataset_name))
             split_id += 1
             print('-' * 50)
             print("Split: {0} =======>".format(split_id))
@@ -42,8 +54,8 @@ class Train_Classifier:
             print("Model: {0}".format(model_path))
 
             network = MultitaskClassifier(labels).to(device)
-            network = nn.DataParallel(network)
-            optimizer = optim.Adam(network.parameters(), lr=lr, weight_decay=0.0005)
+
+            optimizer = optim.Adam(network.parameters(), lr=lr, weight_decay=weight_decay)
             criterion = [nn.CrossEntropyLoss(), nn.CrossEntropyLoss()]
             texture_min_val_correct = 0
 
@@ -60,11 +72,15 @@ class Train_Classifier:
                     running_loss = 0
                     running_loss_imagenet = 0
                     running_loss_texture = 0
+
                     running_imagenet_correct = 0
                     running_texture_correct = 0
+
                     total_imagenet_image_per_epoch = 0
                     total_texture_image_per_epoch = 0
-                    batch_set = self.__get_batch_set(image_net_data_loader_dict, texture_data_loader_dict, phase, task)
+
+                    batch_set = self.__get_batch_set(image_net_data_loader_dict,
+                                                     texture_data_loader_dict, phase, task)
 
                     if phase == "train":
                         random.shuffle(batch_set)
@@ -95,49 +111,51 @@ class Train_Classifier:
                             running_loss += loss.item()
 
                             if task_id == task[0]:
-                                running_imagenet_correct += self.get_num_correct(outputs[0], label)
+                                running_imagenet_correct += Util.get_num_correct(outputs[0], label)
                             elif task_id == task[1]:
-                                running_texture_correct += self.get_num_correct(outputs[1], label)
+                                running_texture_correct += Util.get_num_correct(outputs[1], label)
 
                     epoch_loss = running_loss
                     epoch_loss_imagenet = running_loss_imagenet
                     epoch_loss_texture = running_loss_texture
+
                     epoch_imagenet_accuracy = running_imagenet_correct / total_imagenet_image_per_epoch
                     epoch_texture_accuracy = running_texture_correct / total_texture_image_per_epoch
 
                     print(
                         "{0} ==> loss: {1}, imagenet loss:{2}, texture loss:{3}, "
-                        "texture correct: {4}/{5}, texture accuracy: {6}, "
-                        "imagenet correct: {7}/{8}, imagenet accuracy: {9} ".format(phase,
-                                                                                    epoch_loss,
-                                                                                    epoch_loss_imagenet,
-                                                                                    epoch_loss_texture,
-                                                                                    running_texture_correct,
-                                                                                    total_texture_image_per_epoch,
-                                                                                    epoch_texture_accuracy,
-                                                                                    running_imagenet_correct,
-                                                                                    total_imagenet_image_per_epoch,
-                                                                                    epoch_imagenet_accuracy))
+                        "imagenet correct: {4}/{5}, imagenet accuracy: {6} "
+                        "texture correct: {7}/{8}, texture accuracy: {9}, ".format(phase,
+                                                                                   epoch_loss,
+                                                                                   epoch_loss_imagenet,
+                                                                                   epoch_loss_texture,
+                                                                                   running_imagenet_correct,
+                                                                                   total_imagenet_image_per_epoch,
+                                                                                   epoch_imagenet_accuracy,
+                                                                                   running_texture_correct,
+                                                                                   total_texture_image_per_epoch,
+                                                                                   epoch_texture_accuracy
+                                                                                   ))
                     if phase == 'val' and running_texture_correct > texture_min_val_correct:
                         print("saving model with correct: {0}, improved over previous {1}"
                               .format(running_texture_correct, texture_min_val_correct))
                         texture_min_val_correct = running_texture_correct
                         # saved_model_name = saved_model_name.format(split_id)
-                        torch.save(network.state_dict(), saved_model_name)
+                        torch.save(network.state_dict(), model_path)
 
+        print("Training ended")
         return network
 
-    def __get_batch_set(self, image_net_data_loader_dict, texture_data_loader_dict, phase, task):
+    @staticmethod
+    def __get_batch_set(image_net_data_loader_dict,
+                        texture_data_loader_dict, phase, task):
         batch_set = []
-        for image_net_data in image_net_data_loader_dict[phase]:
-            batch_set.append({task[0]: image_net_data})
+        for image_net_S2_data in image_net_data_loader_dict[phase]:
+            batch_set.append({task[0]: image_net_S2_data})
+
         for texture_data in texture_data_loader_dict[phase]:
             batch_set.append({task[1]: texture_data})
         return batch_set
-
-    @staticmethod
-    def get_num_correct(preds, labels):
-        return preds.argmax(dim=1).eq(labels).sum().item()
 
     def __save_init_weights(self, network):
         np.save("./init_weights/enc1_weight.npy", network.enc1.weight.cpu().data.numpy())

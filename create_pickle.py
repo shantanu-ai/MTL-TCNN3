@@ -81,7 +81,7 @@ def create_pickle_for_training():
         ["alp", "artichoke", "bookshop", "butcher shop",
          "carbonara", "chain", "chainlink fence", "cliff dwelling",
          "confectionery", "corn", "dishrag", "dock",
-          "grocery store", "head cabbage", "honeycomb", "jigsaw puzzle",
+         "grocery store", "head cabbage", "honeycomb", "jigsaw puzzle",
          "lakeside", "rapeseed",
          "sandbar", "shoe shop", "shower curtain", "stone wall", "theater curtain", "tile roof",
          "vault", "velvet", "window screen", "wool", ]
@@ -109,11 +109,17 @@ def create_pickle_for_training():
                       "waffled", "woven", "wrinkled", "zigzagged"]
 
     # image_net data preprocess
-    dpm = Data_Preprocess_Manager()
-    x_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Git_Hub/Texture_Classification/Dataset/ImageNet/ImageNet_TX.pickle"
-    y_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Git_Hub/Texture_Classification/Dataset/ImageNet/ImageNet_TY.pickle"
 
-    image_net_training_data = dpm.create_data(IMAGE_DATA_DIR, IMAGE_NET_LABELS_T, 227)
+    kth_root = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg_original"
+
+    kth_labels = ["sample01", "sample02", "sample03", "sample04", "sample05", "sample05", "sample06", "sample07",
+                  "sample08", "sample09", "sample10", "sample11", "sample12", "sample13", "sample14", "sample15",
+                  "sample16", "sample17", "sample18", "sample19", "sample20", "sample21", "sample22", ""]
+    dpm = Data_Preprocess_Manager()
+    x_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg_X.pickle"
+    y_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg_Y.pickle"
+
+    image_net_training_data = dpm.create_data(kth_root, kth_labels, 227)
     dpm.create_pickle_file(image_net_training_data, x_img_training_data, y_img_training_data)
 
     # texture data preprocess

@@ -1,33 +1,37 @@
-import numpy as np
 import torch
 import torch.utils.data
 from torchvision.utils import save_image
 
+from autoEncoder import Autoencoder
+
 
 class validate_Auto_encoder:
     @staticmethod
-    def validate_auto_encoder(test_data_set, model, task):
+    def validate_auto_encoder(data_loader_test_list, model_path_bn, task, device):
         print(task + "----- started -----------")
-        data_loader = torch.utils.data.DataLoader(
-            test_data_set, num_workers=1, shuffle=False, pin_memory=True)
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        noise_factor = 0.5
-        idx = 1
-        for batch in data_loader:
-            if task == "---validating":
-                img, _ = batch
-            elif task == "---testing":
-                img = batch[0]
 
-            img_noisy = img + noise_factor * torch.randn(img.shape)
-            img_noisy = np.clip(img_noisy, 0., 1.)
-            img = img.to(device)
-            img_noisy = img_noisy.to(device)
+        split_id = 0
+        for data_loader in data_loader_test_list:
+            split_id += 1
+            print('-' * 50)
+            print("Split: {0} =======>".format(split_id))
+            model_path = model_path_bn.format(split_id)
+            print("Model: {0}".format(model_path))
+            model = Autoencoder().to(device)
+            model.load_state_dict(torch.load(model_path, map_location=device))
+            idx = 1
+            for batch in data_loader:
+                if task == "---validating":
+                    img, _ = batch
+                elif task == "---testing":
+                    img = batch[0]
 
-            outputs = model(img_noisy)
-            save_image(img, './Saved_Images/' + str(idx) + '_original_test_input.jpg')
-            save_image(img_noisy, './Saved_Images/' + str(idx) + '_noisy_test_input.jpg')
-            save_image(outputs, './Saved_Images/' + str(idx) + '_denoised_test_reconstruction.jpg')
-            idx += 1
+                img = img.to(device)
+
+                outputs = model(img)
+                save_image(img, './Saved_Images/' + str(idx) + '_original_test_input.jpg')
+                save_image(outputs, './Saved_Images/' + str(idx) + '_test_reconstruction.jpg')
+                idx += 1
+            break
 
         print(task + "----- completed -----------")

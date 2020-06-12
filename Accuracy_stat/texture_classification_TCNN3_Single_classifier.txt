@@ -1,4 +1,4 @@
-### No autoencoder init
+### Single
 ..Testing started..
 --------------------------------------------------
 Split: 1 =======>
@@ -41,3 +41,4 @@ Split: 10 =======>
 Model: ./Models/new/Texture_Single_Classifier_Model_epoch_400_lr_0.0001_split10.pth
 total:541 texture accuracy: 0.2877659574468085
 Mean accuracy: 0.2792021276595745
+

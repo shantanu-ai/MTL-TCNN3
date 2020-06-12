@@ -19,7 +19,7 @@ class Train_Auto_encoder:
         lr = train_parameters["learning_rate"]
 
         split_id = 0
-        print("Size of data_loader_list; " + str(len(data_loader_list)))
+        print("Size of data_loader_list: " + str(len(data_loader_list)))
 
         for data_loader in data_loader_list:
             network = Autoencoder()
@@ -34,6 +34,7 @@ class Train_Auto_encoder:
             print("Split: {0} =======>".format(split_id))
             model_path = saved_model_name.format(split_id)
             print("Model: {0}".format(model_path))
+            min_loss = 1000000.0
             for epoch in range(epochs):
                 total_loss = 0
 
@@ -56,9 +57,12 @@ class Train_Auto_encoder:
                     optimizer.step()
 
                     total_loss += loss.item()
-                print("epoch: {0}/{1}, loss: {2}".format(epoch, epochs, total_loss))
-
-            torch.save(network.state_dict(), model_path)
+                print("epoch: {0}/{1}, loss: {2}".format(epoch, epochs - 1, total_loss))
+                # print(total_loss < min_loss)
+                if total_loss < min_loss:
+                    print("saving model with loss {0}, over previous: {1}".format(total_loss, min_loss))
+                    torch.save(network.state_dict(), model_path)
+                    min_loss = total_loss
 
         print('Saved models\' parameters to disk.')
         return network

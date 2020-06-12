@@ -2,8 +2,9 @@ import os
 
 import numpy as np
 import sklearn.model_selection as sklearn
-from Util import Util
 from torch.utils.data import ConcatDataset
+
+from Util import Util
 
 
 class DataLoader:
@@ -38,25 +39,30 @@ class DataLoader:
 
         return train_set, texture_data_set_size
 
-    def get_image_net_train_set(self, image_net_data_set_path, image_net_label_set_path,
+    def get_test_train_val(self, data_set_path, label_set_path,
                                 split_size, device):
-        print("ImageNet Dataset Size")
-        train_data_set, labels_set = self.__read_dataset(image_net_data_set_path, image_net_label_set_path)
-        X_train, X_val, Y_train, Y_val = self.__spilt_data_set(train_data_set,
-                                                               labels_set,
-                                                               split_size=split_size)
+        print("Dataset Size")
+        train_data_set, labels_set = self.__read_dataset(data_set_path, label_set_path)
+        X_train, X_test, Y_train, Y_test = self.__spilt_data_set(train_data_set,
+                                                                 labels_set,
+                                                                 split_size=split_size)
 
-        self.image_net_set_train_size = Y_train.shape[0]
-        self.image_net_set_test_size = Y_val.shape[0]
-        print("Train set")
-        print(self.image_net_set_train_size)
-        print("Val set")
-        print(self.image_net_set_test_size)
+        X_train, X_val, Y_train, Y_val = self.__spilt_data_set(X_train,
+                                                               Y_train,
+                                                               split_size=0.05)
+
+        print("Train set:")
+        print(Y_train.shape[0])
+        print("Val set:")
+        print(Y_val.shape[0])
+        print("Test set:")
+        print(Y_test.shape[0])
 
         train_set = Util.convert_to_tensor(X_train, Y_train, device)
         val_set = Util.convert_to_tensor(X_val, Y_val, device)
+        test_set = Util.convert_to_tensor(X_test, Y_test, device)
 
-        return train_set, Y_train.shape[0], val_set, Y_val.shape[0]
+        return train_set, Y_train.shape[0], val_set, Y_val.shape[0], test_set, Y_test.shape[0]
 
     def get_texture_set_size(self):
         return self.texture_set_size

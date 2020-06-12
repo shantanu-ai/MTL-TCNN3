@@ -36,3 +36,7 @@ class Util:
     @staticmethod
     def get_device():
         return torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    @staticmethod
+    def get_num_correct(preds, labels):
+        return preds.argmax(dim=1).eq(labels).sum().item()
