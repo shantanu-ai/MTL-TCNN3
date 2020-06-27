@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from Util import Util
@@ -364,12 +365,16 @@ class Texture_Classification_Deep:
         # device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print(device)
         TEXTURE_LABELS = ["Kyberge_blanket1", "Kyberge_blanket2", "Kyberge_canvas1",
-                          "Kyberge_ceiling1", "Kyberge_ceiling2", "Kyberge_cushion1",
-                          "Kyberge_floor1", "Kyberge_floor2", "Kyberge_grass1", "Kyberge_lentils1",
-                          "Kyberge_linseeds1", "Kyberge_oatmeal1", "Kyberge_pearlsugar1", "Kyberge_rice1",
-                          "Kyberge_rice2", "Kyberge_rug1", "Kyberge_sand1", "Kyberge_scarf1", "Kyberge_scarf2",
-                          "Kyberge_sesameseeds1", "Kyberge_stone1", "Kyberge_stone2", "Kyberge_stone3",
-                          "Kyberge_stoneslab1", "Kyberge_wall1"]
+                          "Kyberge_ceiling1", "ceiling2-with-rotations", "cushion1-with-rotations",
+                          "floor1-with-rotations", "floor2-with-rotations", "grass1-with-rotations",
+                          "lentils1-with-rotations", "linseeds1-with-rotations", "oatmeal1-with-rotations",
+                          "pearlsugar1-with-rotations", "rice1-with-rotations", "rice2-with-rotations",
+                          "rug1-with-rotations", "sand1-with-rotations", "scarf1-with-rotations",
+                          "scarf2-with-rotations", "screen1-with-rotations",
+                          "seat1-with-rotations",
+                          "seat2-with-rotations", "sesameseeds1-with-rotations", "stone1-with-rotations",
+                          "stone2-with-rotations", "stone3-with-rotations",
+                          "stoneslab1-with-rotations", "wall1-with-rotations"]
 
         IMAGE_NET_LABELS = \
             ["alp", "artichoke", "Band Aid", "bathing cap", "bookshop", "bull mastiff", "butcher shop",
@@ -383,7 +388,7 @@ class Texture_Classification_Deep:
              "turnstile", "vault", "velvet", "window screen", "wool", "yellow lady's slipper"]
 
         train_parameters = {
-            "epochs": 400,
+            "epochs": 75,
             "learning_rate": 0.0001,
             "texture_batch_size": 32,
             "image_net_batch_size": 32,
@@ -394,8 +399,8 @@ class Texture_Classification_Deep:
         image_net_label_set_path = "./Dataset/ImageNet/ImageNet_Y.pickle"
         image_net_test_path = "./Dataset/ImageNet/ImageNet_Test.pickle"
 
-        texture_train_data_set_path = "./Dataset/Texture/kylberg/kylbergs_X.pickle"
-        texture_train_label_set_path = "./Dataset/Texture/kylberg/kylbergs_Y.pickle"
+        texture_train_data_set_path = "./Dataset/Texture/kylberg/kylberg_X.pickle"
+        texture_train_label_set_path = "./Dataset/Texture/kylberg/kylberg_Y.pickle"
 
         saved_model_name = "./Models/MTL/kylberg/Multitask_Classifier_Model_epoch_" + str(
             train_parameters["epochs"]) + "_lr_" + str(
@@ -406,60 +411,65 @@ class Texture_Classification_Deep:
         _accuracy_list = []
 
         # training starts
+        for i in range(1):
+            texture_train_val_data_loader_list, texture_test_data_loader_list = \
+                DataPreProcessor.preprocess_texture_except_DTD(texture_train_data_set_path,
+                                                               texture_train_label_set_path,
+                                                               train_parameters[
+                                                                   "texture_batch_size"],
+                                                               num_workers=0,
+                                                               device=device,
+                                                               split_size=split_size,
+                                                               type="kylberg",
+                                                               folds=1)
+            image_net_data_loader_dict = DataPreProcessor.preprocess_image_net(image_net_data_set_path,
+                                                                               image_net_label_set_path,
+                                                                               train_parameters[
+                                                                                   "image_net_batch_size"],
+                                                                               image_net_test_path,
+                                                                               num_workers=0,
+                                                                               split_size=split_size,
+                                                                               device=device,
+                                                                               type="ImageNet")
 
-        texture_train_val_data_loader_list, texture_test_data_loader_list = \
-            DataPreProcessor.preprocess_texture_except_DTD(texture_train_data_set_path,
-                                                           texture_train_label_set_path,
-                                                           train_parameters[
-                                                               "texture_batch_size"],
-                                                           num_workers=0,
-                                                           device=device,
-                                                           split_size=split_size,
-                                                           type="kylberg",
-                                                           folds=1)
-        image_net_data_loader_dict = DataPreProcessor.preprocess_image_net(image_net_data_set_path,
-                                                                           image_net_label_set_path,
-                                                                           train_parameters[
-                                                                               "image_net_batch_size"],
-                                                                           image_net_test_path,
-                                                                           num_workers=0,
-                                                                           split_size=split_size,
-                                                                           device=device,
-                                                                           type="ImageNet")
+            train_arguments = {
+                "IMAGE_NET_LABELS": IMAGE_NET_LABELS,
+                "TEXTURE_LABELS": TEXTURE_LABELS,
+                "image_net_data_loader_dict": image_net_data_loader_dict,
+                "texture_data_loader_list": texture_train_val_data_loader_list,
+                "train_parameters": train_parameters,
+                "saved_model_name": saved_model_name
+            }
 
-        train_arguments = {
-            "IMAGE_NET_LABELS": IMAGE_NET_LABELS,
-            "TEXTURE_LABELS": TEXTURE_LABELS,
-            "image_net_data_loader_dict": image_net_data_loader_dict,
-            "texture_data_loader_list": texture_train_val_data_loader_list,
-            "train_parameters": train_parameters,
-            "saved_model_name": saved_model_name
-        }
+            train = Train_Classifier()
+            network = train.train_classifier(train_arguments, device, dataset_name="kylberg")
+            # training ends
 
-        train = Train_Classifier()
-        network = train.train_classifier(train_arguments, device, dataset_name="kylberg")
-        # training ends
+            # testing starts
 
-        # testing starts
+            model_path_bn = "./Models/MTL/kylberg/Multitask_Classifier_Model_epoch_75_lr_0.0001_split{0}.pth"
 
-        model_path_bn = "./Models/MTL/kylberg/Multitask_Classifier_Model_epoch_400_lr_0.0001_split{0}.pth"
+            test_arguments = {
+                "data_loader_test_list": texture_test_data_loader_list,
+                "model_path_bn": model_path_bn,
+                "TEXTURE_LABELS": TEXTURE_LABELS
+            }
 
-        test_arguments = {
-            "data_loader_test_list": texture_test_data_loader_list,
-            "model_path_bn": model_path_bn,
-            "TEXTURE_LABELS": TEXTURE_LABELS
-        }
+            test = Test_Classifier()
+            accuracy_list, mean_accuracy = test.test_classifier(test_arguments, IMAGE_NET_LABELS, device,
+                                                                dataset_name="kylberg")
+            _accuracy_list.append(accuracy_list[0])
 
-        test = Test_Classifier()
-        accuracy_list, mean_accuracy = test.test_classifier(test_arguments, IMAGE_NET_LABELS, device,
-                                                            dataset_name="kylberg")
+            del texture_train_val_data_loader_list
+            del texture_test_data_loader_list
 
+        accuracy_np = np.asarray(accuracy_list)
         file1 = open("kylberg_Details.txt", "a")
         file1.write(str(train_parameters))
-        file1.write("kylberg Mean accuracy: {0}\n".format(mean_accuracy))
-        file1.write(str(accuracy_list))
+        file1.write("kylberg Mean accuracy: {0}\n".format(np.mean(accuracy_np)))
+        file1.write(str(accuracy_np))
         pd.DataFrame.from_dict(
-            accuracy_list,
+            accuracy_np,
             orient='columns'
         ).to_csv("./Accuracy_kylberg.csv")
 

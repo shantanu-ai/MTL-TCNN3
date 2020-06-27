@@ -183,11 +183,11 @@ class DataPreProcessor:
 
     @staticmethod
     def preprocess_texture_except_DTD(texture_train_data_set_path, texture_train_label_set_path, batch_size,
-                                      num_workers, device, split_size, type):
+                                      num_workers, device, split_size, type, folds=1):
         data_loader_train_val_list = []
         data_loader_test_list = []
         # do this for 10 times
-        for i in range(10):
+        for i in range(folds):
             idx = i + 1
             print('-' * 50)
             print("{0} Statistics: ".format(type))

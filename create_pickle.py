@@ -110,14 +110,18 @@ def create_pickle_for_training():
 
     # image_net data preprocess
 
-    kth_root = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg_original"
+    kth_root = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg"
 
-    kth_labels = ["sample01", "sample02", "sample03", "sample04", "sample05", "sample05", "sample06", "sample07",
-                  "sample08", "sample09", "sample10", "sample11", "sample12", "sample13", "sample14", "sample15",
-                  "sample16", "sample17", "sample18", "sample19", "sample20", "sample21", "sample22", ""]
+    kth_labels = ["Kyberge_blanket1", "Kyberge_blanket2", "Kyberge_canvas1",
+                  "Kyberge_ceiling1", "Kyberge_ceiling2", "Kyberge_cushion1",
+                  "Kyberge_floor1", "Kyberge_floor2", "Kyberge_grass1", "Kyberge_lentils1",
+                  "Kyberge_linseeds1", "Kyberge_oatmeal1", "Kyberge_pearlsugar1", "Kyberge_rice1",
+                  "Kyberge_rice2", "Kyberge_rug1", "Kyberge_sand1", "Kyberge_scarf1", "Kyberge_scarf2",
+                  "Kyberge_sesameseeds1", "Kyberge_stone1", "Kyberge_stone2", "Kyberge_stone3",
+                  "Kyberge_stoneslab1", "Kyberge_wall1"]
     dpm = Data_Preprocess_Manager()
-    x_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg_X.pickle"
-    y_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg_Y.pickle"
+    x_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylbergs_X.pickle"
+    y_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylbergs_Y.pickle"
 
     image_net_training_data = dpm.create_data(kth_root, kth_labels, 227)
     dpm.create_pickle_file(image_net_training_data, x_img_training_data, y_img_training_data)

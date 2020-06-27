@@ -53,7 +53,8 @@ class Test_Classifier:
 
             texture_corrects_accuracy = texture_corrects / total_image_per_epoch
             accuracy_list.append(texture_corrects_accuracy)
-            print("total:{0} texture accuracy: {1}".format(texture_corrects, texture_corrects_accuracy))
+            print("total:{0}/{1} texture accuracy: {2}".format(texture_corrects, total_image_per_epoch,
+                                                               texture_corrects_accuracy))
 
         accuracy_np = np.asarray(accuracy_list)
         print("Mean accuracy: {0}".format(np.mean(accuracy_np)))
