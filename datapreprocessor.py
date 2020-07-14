@@ -224,3 +224,47 @@ class DataPreProcessor:
             data_loader_test_list.append(texture_test_data_loader)
 
         return data_loader_train_val_list, data_loader_test_list
+
+    @staticmethod
+    def preprocess_texture_surface(texture_train_data_set_path, texture_train_label_set_path,
+                                   texture_test_data_set_path, texture_test_label_set_path,
+                                   batch_size,
+                                   num_workers, device, split_size, type, folds=1):
+        data_loader_train_val_list = []
+        data_loader_test_list = []
+        # do this for 10 times
+        for i in range(folds):
+            idx = i + 1
+            print('-' * 50)
+            print("{0} Statistics: ".format(type))
+            print('-' * 50)
+            dL = DataLoader()
+            texture_train_set, texture_train_set_size, texture_val_set, texture_val_set_size, \
+            texture_test_set, texture_test_size = \
+                dL.get_train_val_test_sureface(texture_train_data_set_path, texture_train_label_set_path,
+                                               texture_test_data_set_path, texture_test_label_set_path,
+                                               split_size, device)
+
+            print("Train set size: {0}".format(texture_train_set_size))
+            print("Val set size: {0}".format(texture_val_set_size))
+            print("Test set size: {0}".format(texture_test_size))
+            texture_train_data_loader = torch.utils.data.DataLoader(texture_train_set,
+                                                                    batch_size=batch_size,
+                                                                    shuffle=True,
+                                                                    num_workers=num_workers)
+
+            texture_val_data_loader = torch.utils.data.DataLoader(
+                texture_val_set, batch_size=batch_size, num_workers=1, shuffle=False, pin_memory=True)
+
+            texture_test_data_loader = torch.utils.data.DataLoader(
+                texture_test_set, batch_size=batch_size, num_workers=1, shuffle=False, pin_memory=True)
+
+            data_loader_dict = {
+                "train": texture_train_data_loader,
+                "val": texture_val_data_loader
+            }
+
+            data_loader_train_val_list.append(data_loader_dict)
+            data_loader_test_list.append(texture_test_data_loader)
+
+        return data_loader_train_val_list, data_loader_test_list

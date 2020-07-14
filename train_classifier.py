@@ -5,15 +5,93 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
+import copy
 
+from MTLCNN_single import MTLCNN_single
 from MultitaskClassifier import MultitaskClassifier
 from Util import Util
-from autoEncoder import Autoencoder
 
 
 class Train_Classifier:
     def train_classifier(self, train_arguments, device, dataset_name=""):
-        return self.__train(train_arguments, device, dataset_name=dataset_name)
+        self.__train(train_arguments, device, dataset_name=dataset_name)
+
+    def train_classifier_single(self, train_arguments, device):
+        self.__train_single(train_arguments, device)
+
+    def __train_single(self, train_arguments, device):
+        TEXTURE_LABELS = train_arguments["TEXTURE_LABELS"]
+        data_loader_list = train_arguments["texture_data_loader_list"]
+        train_parameters = train_arguments["train_parameters"]
+        saved_model_name = train_arguments["saved_model_name"]
+
+        print("..Training started..")
+        epochs = train_parameters["epochs"]
+        lr = train_parameters["learning_rate"]
+        phases = ['train', 'val']
+        # set batch size
+
+        # set optimizer - Adam
+
+        split_id = 0
+
+        # start training
+        for data_loader_dict in data_loader_list:
+            # initialise network for each dataset
+            network = MTLCNN_single(TEXTURE_LABELS).to(device)
+            optimizer = optim.Adam(network.parameters(), lr=lr, weight_decay=0.0005)
+            criterion = nn.CrossEntropyLoss()
+            min_correct = 0
+            split_id += 1
+            print('-' * 50)
+            print("Split: {0} =======>".format(split_id))
+
+            # start epoch
+            for epoch in range(epochs):
+                print('Epoch {}/{}'.format(epoch, epochs - 1))
+                print('-' * 20)
+
+                for phase in phases:
+                    if phase == 'train':
+                        network.train()  # Set model to training mode
+                    else:
+                        network.eval()  # Set model to evaluate mode
+
+                    running_loss = 0
+                    running_correct = 0
+                    total_image_per_epoch = 0
+
+                    for batch in data_loader_dict[phase]:
+                        images, label = batch
+                        images = images.to(device)
+                        label = label.to(device)
+
+                        optimizer.zero_grad()
+
+                        output = network(images)
+                        loss = criterion(output, label).to(device)
+                        total_image_per_epoch += images.size(0)
+
+                        if phase == "train":
+                            loss.backward()
+                            optimizer.step()
+
+                        running_loss += loss.item() * images.size(0) * 2
+                        running_correct += Util.get_num_correct(output, label)
+
+                    epoch_loss = running_loss / total_image_per_epoch
+
+                    epoch_accuracy = running_correct / total_image_per_epoch
+                    print(
+                        "{0} ==> loss: {1}, correct: {2}/{3}, accuracy: {4}".format(phase, epoch_loss, running_correct,
+                                                                                    total_image_per_epoch,
+                                                                                    epoch_accuracy))
+                    if phase == 'val' and running_correct > min_correct:
+                        print("saving model with correct: {0}, improved over previous {1}"
+                              .format(running_correct, min_correct))
+                        min_correct = running_correct
+                        best_model_wts = copy.deepcopy(network.state_dict())
+                        torch.save(best_model_wts, saved_model_name.format(split_id))
 
     def __train(self, train_arguments, device, dataset_name=""):
 
@@ -99,10 +177,46 @@ class Train_Classifier:
                                 total_imagenet_image_per_epoch += images.size(0)
                                 loss = criterion[0](outputs[0], label).to(device)
                                 running_loss_imagenet += loss.item()
+                                # network.conv4.weight.requires_grad = True
+                                # network.conv4.bias.requires_grad = True
+                                # network.conv5.weight.requires_grad = True
+                                # network.conv5.bias.requires_grad = True
+                                # network.object_detect_fc1.weight.requires_grad = True
+                                # network.object_detect_fc1.bias.requires_grad = True
+                                # network.object_detect_fc2.weight.requires_grad = True
+                                # network.object_detect_fc2.bias.requires_grad = True
+                                # network.object_detect_out.weight.requires_grad = True
+                                # network.object_detect_out.bias.requires_grad = True
+                                #
+                                # network.fc_texture_1.weight.requires_grad = False
+                                # network.fc_texture_1.bias.requires_grad = False
+                                # network.fc_texture_2.weight.requires_grad = False
+                                # network.fc_texture_2.bias.requires_grad = False
+                                # network.texture_out.weight.requires_grad = False
+                                # network.texture_out.bias.requires_grad = False
+
                             elif task_id == task[1]:
                                 total_texture_image_per_epoch += images.size(0)
                                 loss = criterion[1](outputs[1], label).to(device)
                                 running_loss_texture += loss.item()
+
+                                # network.conv4.weight.requires_grad = False
+                                # network.conv4.bias.requires_grad = False
+                                # network.conv5.weight.requires_grad = False
+                                # network.conv5.bias.requires_grad = False
+                                # network.object_detect_fc1.weight.requires_grad = False
+                                # network.object_detect_fc1.bias.requires_grad = False
+                                # network.object_detect_fc2.weight.requires_grad = False
+                                # network.object_detect_fc2.bias.requires_grad = False
+                                # network.object_detect_out.weight.requires_grad = False
+                                # network.object_detect_out.bias.requires_grad = False
+                                #
+                                # network.fc_texture_1.weight.requires_grad = True
+                                # network.fc_texture_1.bias.requires_grad = True
+                                # network.fc_texture_2.weight.requires_grad = True
+                                # network.fc_texture_2.bias.requires_grad = True
+                                # network.texture_out.weight.requires_grad = True
+                                # network.texture_out.bias.requires_grad = True
 
                             if phase == "train":
                                 loss.backward()
@@ -144,7 +258,6 @@ class Train_Classifier:
                         torch.save(network.state_dict(), model_path)
 
         print("Training ended")
-        return network
 
     @staticmethod
     def __get_batch_set(image_net_data_loader_dict,
@@ -165,21 +278,21 @@ class Train_Classifier:
         np.save("./init_weights/enc3_weight.npy", network.enc3.weight.cpu().data.numpy())
         np.save("./init_weights/enc3_bias.npy", network.enc3.bias.cpu().data.numpy())
 
-    @staticmethod
-    def initialize_model(auto_encoder_model_path, dataset_labels, device):
-        model = Autoencoder().to(device)
-        model.load_state_dict(torch.load(auto_encoder_model_path, map_location=device))
-        TEXTURE_LABELS = dataset_labels["TEXTURE_LABELS"]
-        IMAGE_NET_LABELS = dataset_labels["IMAGE_NET_LABELS"]
-        auto_encoder_model = Autoencoder().to(device)
-        init_weights = {
-            "conv1_wt": model.enc1.weight.data,
-            "conv1_bias": model.enc1.bias.data,
-            "conv2_wt": model.enc2.weight.data,
-            "conv2_bias": model.enc2.bias.data,
-            "conv3_wt": model.enc3.weight.data,
-            "conv3_bias": model.enc3.bias.data
-        }
-        auto_encoder_model.load_state_dict(torch.load(auto_encoder_model_path, map_location=device))
-        network = MTLCNN(init_weights, TEXTURE_LABELS, IMAGE_NET_LABELS, device).to(device)
-        return network
+    # @staticmethod
+    # def initialize_model(auto_encoder_model_path, dataset_labels, device):
+    #     model = Autoencoder().to(device)
+    #     model.load_state_dict(torch.load(auto_encoder_model_path, map_location=device))
+    #     TEXTURE_LABELS = dataset_labels["TEXTURE_LABELS"]
+    #     IMAGE_NET_LABELS = dataset_labels["IMAGE_NET_LABELS"]
+    #     auto_encoder_model = Autoencoder().to(device)
+    #     init_weights = {
+    #         "conv1_wt": model.enc1.weight.data,
+    #         "conv1_bias": model.enc1.bias.data,
+    #         "conv2_wt": model.enc2.weight.data,
+    #         "conv2_bias": model.enc2.bias.data,
+    #         "conv3_wt": model.enc3.weight.data,
+    #         "conv3_bias": model.enc3.bias.data
+    #     }
+    #     auto_encoder_model.load_state_dict(torch.load(auto_encoder_model_path, map_location=device))
+    #     network = MTLCNN(init_weights, TEXTURE_LABELS, IMAGE_NET_LABELS, device).to(device)
+    #     return network

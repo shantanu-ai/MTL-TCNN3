@@ -1,0 +1,2 @@
+{'texture_batch_size': 32, 'epochs': 400, 'learning_rate': 0.0001, 'weight_decay': 0.0005, 'image_net_batch_size': 32}Surface Mean accuracy: 0.7230414746543778
+[0.7230414746543778]

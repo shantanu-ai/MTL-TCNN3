@@ -110,21 +110,24 @@ def create_pickle_for_training():
 
     # image_net data preprocess
 
-    kth_root = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylberg"
+    kth_root = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Git_Hub/Texture_Classification/Dataset/Texture/FMD/image"
 
-    kth_labels = ["Kyberge_blanket1", "Kyberge_blanket2", "Kyberge_canvas1",
-                  "Kyberge_ceiling1", "Kyberge_ceiling2", "Kyberge_cushion1",
-                  "Kyberge_floor1", "Kyberge_floor2", "Kyberge_grass1", "Kyberge_lentils1",
-                  "Kyberge_linseeds1", "Kyberge_oatmeal1", "Kyberge_pearlsugar1", "Kyberge_rice1",
-                  "Kyberge_rice2", "Kyberge_rug1", "Kyberge_sand1", "Kyberge_scarf1", "Kyberge_scarf2",
-                  "Kyberge_sesameseeds1", "Kyberge_stone1", "Kyberge_stone2", "Kyberge_stone3",
-                  "Kyberge_stoneslab1", "Kyberge_wall1"]
+
+
+    surface_labels = ["fabric", "foliage", "glass", "leather", "metal", "paper", "plastic", "stone", "water", "wood"]
+    print(len(surface_labels))
+
     dpm = Data_Preprocess_Manager()
-    x_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylbergs_X.pickle"
-    y_img_training_data = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Dataset/kylbergs_Y.pickle"
+    x_img_pickle_file_name = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Git_Hub/Texture_Classification/Dataset/Texture/FMD/FMD_X_vaild.pickle"
+    y_img_pickle_file_name = "/Users/shantanughosh/Desktop/Shantanu_MS/Research/Dapeng_Wu/Git_Hub/Texture_Classification/Dataset/Texture/FMD/FMD_Y_vaild.pickle"
 
-    image_net_training_data = dpm.create_data(kth_root, kth_labels, 227)
-    dpm.create_pickle_file(image_net_training_data, x_img_training_data, y_img_training_data)
+    # for x in os.listdir(kth_root):
+    #     surface_labels.append(x)
+
+    print(surface_labels)
+
+    image_net_training_data = dpm.create_data(kth_root, surface_labels, 227)
+    dpm.create_pickle_file(image_net_training_data, x_img_pickle_file_name, y_img_pickle_file_name)
 
     # texture data preprocess
     # testing

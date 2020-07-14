@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torch import optim
 
-from autoEncoder import Autoencoder
+from zz.autoEncoder import Autoencoder
 
 
 class Train_Auto_encoder:

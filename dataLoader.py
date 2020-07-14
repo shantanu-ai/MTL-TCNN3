@@ -40,7 +40,7 @@ class DataLoader:
         return train_set, texture_data_set_size
 
     def get_test_train_val(self, data_set_path, label_set_path,
-                                split_size, device):
+                           split_size, device):
         print("Dataset Size")
         train_data_set, labels_set = self.__read_dataset(data_set_path, label_set_path)
         X_train, X_test, Y_train, Y_test = self.__spilt_data_set(train_data_set,
@@ -50,6 +50,30 @@ class DataLoader:
         X_train, X_val, Y_train, Y_val = self.__spilt_data_set(X_train,
                                                                Y_train,
                                                                split_size=0.05)
+
+        print("Train set:")
+        print(Y_train.shape[0])
+        print("Val set:")
+        print(Y_val.shape[0])
+        print("Test set:")
+        print(Y_test.shape[0])
+
+        train_set = Util.convert_to_tensor(X_train, Y_train, device)
+        val_set = Util.convert_to_tensor(X_val, Y_val, device)
+        test_set = Util.convert_to_tensor(X_test, Y_test, device)
+
+        return train_set, Y_train.shape[0], val_set, Y_val.shape[0], test_set, Y_test.shape[0]
+
+    def get_train_val_test_sureface(self, data_set_path_train, label_set_path_train,
+                                    data_set_path_test, label_set_path_test,
+                                    split_size, device):
+        print("Dataset Size")
+        train_data_set, labels_set = self.__read_dataset(data_set_path_train, label_set_path_train)
+        X_train, X_val, Y_train, Y_val = self.__spilt_data_set(train_data_set,
+                                                               labels_set,
+                                                               split_size=split_size)
+
+        X_test, Y_test = self.__read_dataset(data_set_path_test, label_set_path_test)
 
         print("Train set:")
         print(Y_train.shape[0])

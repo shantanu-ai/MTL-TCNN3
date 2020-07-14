@@ -2,7 +2,7 @@ import torch
 import torch.utils.data
 from torchvision.utils import save_image
 
-from autoEncoder import Autoencoder
+from zz.autoEncoder import Autoencoder
 
 
 class validate_Auto_encoder:

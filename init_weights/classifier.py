@@ -5,7 +5,7 @@ from torch import nn, optim
 
 from MultitaskClassifier import MTLCNN
 from Util import Util
-from autoEncoder import Autoencoder
+from zz.autoEncoder import Autoencoder
 from dataLoader import DataLoader
 
 
