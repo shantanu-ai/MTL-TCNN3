@@ -4,6 +4,8 @@ Repository of Deep Multitask Texture Classifier(MTL-TCNN) - created as a part of
 ## Contributors
 [Shantanu Ghosh](https://www.linkedin.com/in/shantanu-ghosh-b369783a/)
 
+[Dapeng Oliver Wu](http://www.wu.ece.ufl.edu/)
+
 ## Dependencies
 [python 3.7.7](https://www.python.org/downloads/release/python-374/)
 
@@ -11,7 +13,7 @@ Repository of Deep Multitask Texture Classifier(MTL-TCNN) - created as a part of
 
 ## Dataset 
 
-[Dapeng Oliver Wu](http://www.wu.ece.ufl.edu/)
+
 ## How to run
 To reproduce the experiments mentioned in the report, type the following
 command: 
