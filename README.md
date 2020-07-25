@@ -25,7 +25,7 @@ The DTD dataset files can be accessed from the [location](https://uflorida-my.sh
 One needs to download the files and place them in /Dataset/Texture/kth folder.
 
 ## How to run
-To reproduce the experiments mentioned in the report, type the following
+To reproduce the experiments mentioned in the report, first download the dataset as described above and then, type the following
 command: 
 
 <b>python3 main_texture_classifiery</b>
