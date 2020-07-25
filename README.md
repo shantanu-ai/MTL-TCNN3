@@ -28,7 +28,7 @@ One needs to download the files and place them in /Dataset/Texture/kth folder.
 To reproduce the experiments mentioned in the report, first download the dataset as described above and then, type the following
 command: 
 
-<b>python3 main_texture_classifiery</b>
+<b>python3 main_texture_classifier.py</b>
 
 ## Report
 The report of this research is kept at the following [location](https://github.com/Shantanu48114860/MTL-TCNN3/blob/master/Report/Texture_Classification.pdf).
