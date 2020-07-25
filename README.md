@@ -13,18 +13,15 @@ Repository of Deep Multitask Texture Classifier(MTL-TCNN) - created as a part of
 
 ## Dataset 
 ImageNet:
-The ImageNet dataset files can be accessed from the [location].(https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FImageNet)
-
+The ImageNet dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FImageNet).
 One needs to download the files and place them in /Dataset/ImageNet folder.
 
 DTD:
-The DTD dataset files can be accessed from the [location].(https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FTexture%2FDTD)
-
+The DTD dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FTexture%2FDTD).
 One needs to download the files and place them in /Dataset/Texture/DTD folder.
 
 Kth:
-The DTD dataset files can be accessed from the [location].(https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FTexture%2Fkth)
-
+The DTD dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FTexture%2Fkth).
 One needs to download the files and place them in /Dataset/Texture/kth folder.
 
 ## How to run
