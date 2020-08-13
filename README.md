@@ -2,8 +2,10 @@
 Repository of Deep Multitask Texture Classifier(MTL-TCNN) - created as a part of Independent Research under Prof (Dr.) Dapeng Oliver Wu, ECE, UF, Florida, USA.
 
 # Introduction:
-This project is the implementation of the paper: <b>"Using filter banks in Convolutional Neural Networks for texture classification"</b>  [[arXiv]](https://arxiv.org/pdf/1601.02919.pdf) in pytorch. <br/>
+This project uses the paper: <b>"Using filter banks in Convolutional Neural Networks for texture classification"</b>  [[arXiv]](https://arxiv.org/pdf/1601.02919.pdf) as a baseline model. <br/>
 V. Andrearczyk & Paul F. Whelan
+
+The implementation of TCNN3 as a single task classifier can be found at the following [location](https://github.com/Shantanu48114860/TCNN3)
 
 ## Abstract
 Texture bestows important characteristics of many types of images in computer vision and classifying textures is one of the most challenging problems in pattern recognition which draws the attention of computer vision researchers over many decades. Recently with the popularity of deep learning algorithms, particularly Convolution Neural Network (CNN), researchers can extract features that helped them to improve the performance of tasks like object detection and recogni- tion significantly over previous handcrafted features. In texture classification, the CNN layers can be used as filter banks for feature extraction whose complexity will increase with the depth of the network. In this study, we introduce a novel multitask texture classifier(MTL-TCNN) where we used multitask learning instead of pretraining sharing feature representation between two common tasks; one task being identifying the objects from Imagenet dataset using Alexnet and second, being classifying the textures using TCNN3. For evaluation, we used two standard benchmark datasets (KTH-Tips and DTD) for texture classifi- cation. Our experiments demonstrated enhanced performance classifying textures over TCNN3.
@@ -36,6 +38,13 @@ To reproduce the experiments mentioned in the report, first download the dataset
 command: 
 
 <b>python3 main_texture_classifier.py</b>
+
+# Hyperparameters:
+Epochs(DTD): 400<br/>
+Epochs(kth): 400<br/>
+Learning rate: 0.0001<br/>
+Batch size: 32<br/>
+Weight Decay: 0.0005<br/>
 
 ## Report
 The report of this research is kept at the following [location](https://github.com/Shantanu48114860/MTL-TCNN3/blob/master/Report/Texture_Classification.pdf).
