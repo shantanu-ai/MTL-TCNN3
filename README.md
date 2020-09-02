@@ -22,15 +22,15 @@ Texture bestows important characteristics of many types of images in computer vi
 
 ## Dataset 
 ImageNet:
-The ImageNet dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FImageNet).
+The ImageNet dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/:f:/g/personal/shantanughosh_ufl_edu/EiPLx3bN7lxFtTmQxdmub1cBsLeZep2KC9WOjrFKS0vYoQ?e=aqyNeN).
 One needs to download the files and place them in /Dataset/ImageNet folder.
 
 DTD:
-The DTD dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FTexture%2FDTD).
+The DTD dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/:f:/g/personal/shantanughosh_ufl_edu/EowQWnydPX1MnTuSByyW_gIBUCRW9vh8-9oId2GnRaXRQA?e=d9O5Zu).
 One needs to download the files and place them in /Dataset/Texture/DTD folder.
 
 Kth:
-The DTD dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/personal/shantanughosh_ufl_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fshantanughosh%5Fufl%5Fedu%2FDocuments%2FTexture%5FDataset%2FDataset%2FTexture%2Fkth).
+The DTD dataset files can be accessed from the [location](https://uflorida-my.sharepoint.com/:f:/g/personal/shantanughosh_ufl_edu/Eu5G1SQf4YRMh60VQdiPlmYBqjFpsPbwD6tPvSgTaDCF0A?e=67zJis).
 One needs to download the files and place them in /Dataset/Texture/kth folder.
 
 ## How to run
