@@ -5,7 +5,7 @@ Repository of Deep Multitask Texture Classifier(MTL-TCNN) - created as a part of
 This project uses the paper: <b>"Using filter banks in Convolutional Neural Networks for texture classification"</b>  [[arXiv]](https://arxiv.org/pdf/1601.02919.pdf) as a baseline model. <br/>
 V. Andrearczyk & Paul F. Whelan
 
-The implementation of TCNN3 in Pytorch as a single task classifier as a part of this study, can be found at the following [location](https://github.com/Shantanu48114860/TCNN3)
+The implementation of TCNN3 in Pytorch by me as a single task classifier as a part of this study, can be found at the following [location](https://github.com/Shantanu48114860/TCNN3)
 
 ## Report
 The report of this research is kept at the following [location](https://github.com/Shantanu48114860/MTL-TCNN3/blob/master/Report/Texture_Classification.pdf).
