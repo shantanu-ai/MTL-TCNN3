@@ -1,7 +1,8 @@
+# Deep Multitask Texture Classifier(MTL-TCNN)
 ## Description
 Repository of Deep Multitask Texture Classifier(MTL-TCNN) - created as a part of Independent Research study under Prof (Dr.) Dapeng Oliver Wu, ECE, UF, Florida, USA in Spring 2020 (Feb - April, 2020). 
 
-# Introduction:
+## Introduction:
 This project uses the paper: <b>"Using filter banks in Convolutional Neural Networks for texture classification"</b>  [[arXiv]](https://arxiv.org/pdf/1601.02919.pdf) as a baseline model. <br/>
 V. Andrearczyk & Paul F. Whelan
 
@@ -42,7 +43,7 @@ command:
 
 <b>python3 main_texture_classifier.py</b>
 
-# Hyperparameters:
+## Hyperparameters:
 Epochs(DTD): 400<br/>
 Epochs(kth): 400<br/>
 Learning rate: 0.0001<br/>
